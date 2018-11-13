@@ -1,0 +1,43 @@
+version: '2'
+services:
+  firefox:
+    image: selenium/node-firefox:3.12.0-cobalt
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: hub
+    networks:
+      - no-internet
+  chrome:
+    image: selenium/node-chrome:3.12.0-cobalt
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: hub
+    networks:
+      - no-internet
+
+  hub:
+    image: selenium/hub:3.12.0-cobalt
+    #hostname: hub.local.com
+    ports:
+      - "4444:4444"
+    networks:
+      - no-internet
+
+  tor:
+    image: dperson/torproxy
+    ports:
+      - 9050:9050
+      - 8118:8118
+    networks:
+      - no-internet
+networks:
+  no-internet:
+     internal: false
+  internet:
+     internal: false
